@@ -60,7 +60,7 @@ public:
 	}
 
 	/// <summary>
-	/// Set Vec4 from SIMD register
+	/// Set Vec4 from SIMD register (Move constructor)
 	/// </summary>
 	/// <param name="_vals">Values to use</param>
 	/// <returns>New Vec4i</returns>
@@ -80,11 +80,33 @@ public:
 	}
 
 	/// <summary>
+	/// Add Two Vectors (Move Op)
+	/// </summary>
+	/// <param name="rhs">Right Hand Side Vector</param>
+	/// <returns></returns>
+	inline Vec4i operator+(Vec4i&& rhs)
+	{
+		return Vec4i(_mm_add_epi32(this->valsSIMD, rhs.valsSIMD));
+	}
+
+	/// <summary>
 	/// Add Two Vectors
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
 	inline Vec4i& operator+=(const Vec4i& rhs)
+	{
+		// MMM this is creating a temp somehow
+		this->valsSIMD = _mm_add_epi32(this->valsSIMD, rhs.valsSIMD);
+		return *this;
+	}
+
+	/// <summary>
+	/// Add Two Vectors (Move constructor)
+	/// </summary>
+	/// <param name="rhs">Right Hand Side Vector</param>
+	/// <returns></returns>
+	inline Vec4i& operator+=(Vec4i&& rhs)
 	{
 		this->valsSIMD = _mm_add_epi32(this->valsSIMD, rhs.valsSIMD);
 		return *this;
