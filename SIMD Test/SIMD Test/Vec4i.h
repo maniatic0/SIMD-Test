@@ -3,15 +3,18 @@
 #include <stdint.h>
 #include <emmintrin.h> // SSE2
 #include <smmintrin.h> // SSE4.1
+#include <tmmintrin.h> // SSE3
 #include <cstring>
 
+#define ALIGN(N) __declspec(align(N))
+#define FORCE_INLINE __forceinline
 
-union __declspec(align(16)) Vec4i
+union ALIGN(16) Vec4i
 {
 private:
-	__declspec(align(16)) __m128i valsSIMD;
+	ALIGN(16) __m128i valsSIMD;
 public:
-	__declspec(align(16)) int32_t vals[4];
+	ALIGN(16) int32_t vals[4];
 	struct
 	{
 		int32_t x;
@@ -75,7 +78,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i operator+(const Vec4i &rhs)
+	FORCE_INLINE Vec4i operator+(const Vec4i &rhs)
 	{
 		return Vec4i(_mm_add_epi32(this->valsSIMD, rhs.valsSIMD));
 	}
@@ -85,7 +88,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i operator+(Vec4i&& rhs)
+	FORCE_INLINE Vec4i operator+(Vec4i&& rhs)
 	{
 		return Vec4i(_mm_add_epi32(this->valsSIMD, rhs.valsSIMD));
 	}
@@ -95,7 +98,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i& operator+=(const Vec4i& rhs)
+	FORCE_INLINE Vec4i& operator+=(const Vec4i& rhs)
 	{
 		// MMM this is creating a temp somehow
 		this->valsSIMD = _mm_add_epi32(this->valsSIMD, rhs.valsSIMD);
@@ -107,7 +110,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i& operator+=(Vec4i&& rhs)
+	FORCE_INLINE Vec4i& operator+=(Vec4i&& rhs)
 	{
 		// MMM this is creating a temp somehow
 		this->valsSIMD = _mm_add_epi32(this->valsSIMD, rhs.valsSIMD);
@@ -119,7 +122,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i operator-(const Vec4i& rhs)
+	FORCE_INLINE Vec4i operator-(const Vec4i& rhs)
 	{
 		return Vec4i(_mm_sub_epi32(this->valsSIMD, rhs.valsSIMD));
 	}
@@ -129,7 +132,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i operator-(Vec4i&& rhs)
+	FORCE_INLINE Vec4i operator-(Vec4i&& rhs)
 	{
 		return Vec4i(_mm_sub_epi32(this->valsSIMD, rhs.valsSIMD));
 	}
@@ -139,7 +142,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i& operator-=(const Vec4i& rhs)
+	FORCE_INLINE Vec4i& operator-=(const Vec4i& rhs)
 	{
 		// MMM this is creating a temp somehow
 		this->valsSIMD = _mm_sub_epi32(this->valsSIMD, rhs.valsSIMD);
@@ -151,7 +154,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i& operator-=(Vec4i&& rhs)
+	FORCE_INLINE Vec4i& operator-=(Vec4i&& rhs)
 	{
 		// MMM this is creating a temp somehow
 		this->valsSIMD = _mm_sub_epi32(this->valsSIMD, rhs.valsSIMD);
@@ -163,7 +166,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i operator*(const Vec4i& rhs)
+	FORCE_INLINE Vec4i operator*(const Vec4i& rhs)
 	{
 		return Vec4i(_mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD));
 	}
@@ -173,7 +176,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i operator*(Vec4i&& rhs)
+	FORCE_INLINE Vec4i operator*(Vec4i&& rhs)
 	{
 		return Vec4i(_mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD));
 	}
@@ -183,7 +186,7 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i& operator*=(const Vec4i& rhs)
+	FORCE_INLINE Vec4i& operator*=(const Vec4i& rhs)
 	{
 		// MMM this is creating a temp somehow
 		this->valsSIMD = _mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD);
@@ -195,10 +198,34 @@ public:
 	/// </summary>
 	/// <param name="rhs">Right Hand Side Vector</param>
 	/// <returns></returns>
-	inline Vec4i& operator*=(Vec4i&& rhs)
+	FORCE_INLINE Vec4i& operator*=(Vec4i&& rhs)
 	{
 		// MMM this is creating a temp somehow
 		this->valsSIMD = _mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD);
 		return *this;
 	}
+
+	friend Vec4i abs(const Vec4i& vec);
+	friend Vec4i abs(Vec4i&& vec);
+	
 };
+
+/// <summary>
+/// Get the Absolute Value per Component from a Vector
+/// </summary>
+/// <param name="vec">Vector</param>
+/// <returns>Absolute Value per Component</returns>
+FORCE_INLINE Vec4i abs(const Vec4i& vec)
+{
+	return Vec4i(_mm_abs_epi32(vec.valsSIMD));
+}
+
+/// <summary>
+/// Get the Absolute Value per Component from a Vector
+/// </summary>
+/// <param name="vec">Vector</param>
+/// <returns>Absolute Value per Component</returns>
+FORCE_INLINE Vec4i abs(Vec4i&& vec)
+{
+	return Vec4i(_mm_abs_epi32(vec.valsSIMD));
+}
