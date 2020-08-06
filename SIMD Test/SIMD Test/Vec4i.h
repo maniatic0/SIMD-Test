@@ -205,9 +205,18 @@ public:
 		return *this;
 	}
 
-	friend Vec4i abs(const Vec4i& vec);
-	friend Vec4i abs(Vec4i&& vec);
+	friend FORCE_INLINE Vec4i abs(const Vec4i& vec);
+	friend FORCE_INLINE Vec4i abs(Vec4i&& vec);
 	
+	friend FORCE_INLINE Vec4i max(const Vec4i& lhs, const Vec4i& rhs);
+	friend FORCE_INLINE Vec4i max(const Vec4i& lhs, Vec4i&& rhs);
+	friend FORCE_INLINE Vec4i max(Vec4i&& lhs, const Vec4i& rhs);
+	friend FORCE_INLINE Vec4i max(Vec4i&& lhs, Vec4i&& rhs);
+
+	friend FORCE_INLINE Vec4i min(const Vec4i& lhs, const Vec4i& rhs);
+	friend FORCE_INLINE Vec4i min(const Vec4i& lhs, Vec4i&& rhs);
+	friend FORCE_INLINE Vec4i min(Vec4i&& lhs, const Vec4i& rhs);
+	friend FORCE_INLINE Vec4i min(Vec4i&& lhs, Vec4i&& rhs);
 };
 
 /// <summary>
@@ -228,4 +237,92 @@ FORCE_INLINE Vec4i abs(const Vec4i& vec)
 FORCE_INLINE Vec4i abs(Vec4i&& vec)
 {
 	return Vec4i(_mm_abs_epi32(vec.valsSIMD));
+}
+
+/// <summary>
+/// Get the Maximum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Maximum per Component</returns>
+FORCE_INLINE Vec4i max(const Vec4i& lhs, const Vec4i& rhs)
+{
+	return Vec4i(_mm_max_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Maximum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Maximum per Component</returns>
+FORCE_INLINE Vec4i max(const Vec4i& lhs, Vec4i&& rhs)
+{
+	return Vec4i(_mm_max_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Maximum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Maximum per Component</returns>
+FORCE_INLINE Vec4i max(Vec4i&& lhs, const Vec4i& rhs)
+{
+	return Vec4i(_mm_max_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Maximum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Maximum per Component</returns>
+FORCE_INLINE Vec4i max(Vec4i&& lhs, Vec4i&& rhs)
+{
+	return Vec4i(_mm_max_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Minimum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Minimum per Component</returns>
+FORCE_INLINE Vec4i min(const Vec4i& lhs, const Vec4i& rhs)
+{
+	return Vec4i(_mm_min_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Minimum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Minimum per Component</returns>
+FORCE_INLINE Vec4i min(const Vec4i& lhs, Vec4i&& rhs)
+{
+	return Vec4i(_mm_min_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Minimum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Minimum per Component</returns>
+FORCE_INLINE Vec4i min(Vec4i&& lhs, const Vec4i& rhs)
+{
+	return Vec4i(_mm_min_epi32(lhs.valsSIMD, rhs.valsSIMD));
+}
+
+/// <summary>
+/// Get the Minimum per Component for two Vectors
+/// </summary>
+/// <param name="lhs">Left Vector</param>
+/// <param name="rhs">Right Vector</param>
+/// <returns>Vector with the Minimum per Component</returns>
+FORCE_INLINE Vec4i min(Vec4i&& lhs, Vec4i&& rhs)
+{
+	return Vec4i(_mm_min_epi32(lhs.valsSIMD, rhs.valsSIMD));
 }
