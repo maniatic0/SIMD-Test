@@ -1,7 +1,8 @@
 #pragma once
 
 #include <stdint.h>
-#include <emmintrin.h>
+#include <emmintrin.h> // SSE2
+#include <smmintrin.h> // SSE4.1
 #include <cstring>
 
 
@@ -157,5 +158,47 @@ public:
 		return *this;
 	}
 
+	/// <summary>
+	/// Multiply Two Vectors
+	/// </summary>
+	/// <param name="rhs">Right Hand Side Vector</param>
+	/// <returns></returns>
+	inline Vec4i operator*(const Vec4i& rhs)
+	{
+		return Vec4i(_mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD));
+	}
 
+	/// <summary>
+	/// Multiply Two Vectors (Move Op)
+	/// </summary>
+	/// <param name="rhs">Right Hand Side Vector</param>
+	/// <returns></returns>
+	inline Vec4i operator*(Vec4i&& rhs)
+	{
+		return Vec4i(_mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD));
+	}
+
+	/// <summary>
+	/// Multiply Two Vectors
+	/// </summary>
+	/// <param name="rhs">Right Hand Side Vector</param>
+	/// <returns></returns>
+	inline Vec4i& operator*=(const Vec4i& rhs)
+	{
+		// MMM this is creating a temp somehow
+		this->valsSIMD = _mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD);
+		return *this;
+	}
+
+	/// <summary>
+	/// Multiply Two Vectors (Move constructor)
+	/// </summary>
+	/// <param name="rhs">Right Hand Side Vector</param>
+	/// <returns></returns>
+	inline Vec4i& operator*=(Vec4i&& rhs)
+	{
+		// MMM this is creating a temp somehow
+		this->valsSIMD = _mm_mullo_epi32(this->valsSIMD, rhs.valsSIMD);
+		return *this;
+	}
 };
